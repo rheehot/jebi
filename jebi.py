@@ -2,6 +2,8 @@ import sys
 
 __version__ = '0.1-dev'
 
+from types import SimpleNamespace
+
 from handy import makelist
 
 try:
@@ -46,6 +48,7 @@ class Jebi:
     def __init__(self, **kwargs):
         self.routes = []
         self.router = Router()
+        self.error_handler = {}
 
         pass
 
@@ -103,6 +106,46 @@ def run(app=None, server='wsgiref', host='127.0.0.1', port=8080, **kwargs):
     """
     server = server(host=host, port=port, **kwargs)
     server.run(app)
+
+
+#########################
+# HTTP and WSGI Tools   #
+#########################
+
+class BaseRequest:
+    """
+    A wrapper for WSGI environment dictionaries that adds new attributes to request
+    """
+    __slots__ = ('environ',)
+
+    # TODO: set buffer size
+
+    def __init__(self, environ=None):
+        self.environ = {} if environ is None else environ
+        self.environ['jebi.request'] = self
+
+
+class BaseResponse:
+    """
+    A class for a response body, headers and cookies.
+    :param body: The response body
+    :param status: An HTTP code
+    :param headers: A dict like name-value pairs
+    """
+    default_status = 200
+    default_content_type = 'text/html; charset=UTF-8'
+
+    def __init__(self, body='', status=None, headers=None, **kwargs):
+        self._headers = {}
+        self.body = body
+        self.status = status
+
+
+#########################
+# Constants and Globals #
+#########################
+
+DEBUG = False
 
 
 def _main(argv):
