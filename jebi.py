@@ -2,9 +2,7 @@ import sys
 
 __version__ = '0.1-dev'
 
-from types import SimpleNamespace
-
-from handy import makelist
+from helpers import makelist
 
 try:
     _stdout, _stderr = sys.stdout.write, sys.stderr.write
@@ -150,10 +148,6 @@ DEBUG = False
 
 def _main(argv):
     args, parser = _cli_parse(argv)
-
-    if args.version:
-        _stdout(f'jebi {__version__}\n')
-        sys.exit(0)
 
     sys.path.insert(0, '.')
     sys.modules.setdefault('bottle', sys.modules['__main__'])

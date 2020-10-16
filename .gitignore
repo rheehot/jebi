@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # idea
+.idea
 .idea/.gitignore
 .idea/inspectionProfiles/
 .idea/jebi.iml
